@@ -1,0 +1,17 @@
+# Codex CLI Project Configuration
+# https://developers.openai.com/codex/config-reference/
+
+# 프로젝트 문서 설정
+project_doc_max_bytes = 65536  # 64KB (기본 32KB보다 큼)
+
+# AGENTS.md가 없을 때 대체 파일명
+project_doc_fallback_filenames = ["README.md", "CONTRIBUTING.md"]
+
+# 추가 개발자 지침 (세션에 주입됨)
+developer_instructions = """
+이 프로젝트는 R2-D2 방법론(TDD 기반 설계 중심 개발)을 따릅니다.
+- 테스트 먼저 작성 (Red → Green → Refactor)
+- 커밋은 사용자 승인 후에만 수행
+- Dict 접근 시 data["key"] 사용 (.get() 지양)
+- 출력은 logger.info() 사용 (print 금지)
+"""

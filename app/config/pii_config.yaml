@@ -1,0 +1,207 @@
+# PII 자동 비식별화 설정 파일
+
+# PII 패턴 정의
+pii_patterns:
+  korean:
+    resident_id:
+      pattern: '\d{6}-[1-4]\d{6}'
+      description: '주민등록번호'
+      risk_level: 'high'
+      enabled: true
+    
+    foreign_id:
+      pattern: '\d{6}-[5-8]\d{6}'
+      description: '외국인등록번호'
+      risk_level: 'high'
+      enabled: true
+    
+    phone:
+      pattern: '01[0-9]-?\d{3,4}-?\d{4}'
+      description: '휴대전화번호'
+      risk_level: 'medium'
+      enabled: true
+    
+    telephone:
+      pattern: '0\d{1,2}-?\d{3,4}-?\d{4}'
+      description: '일반전화번호'
+      risk_level: 'medium'
+      enabled: true
+    
+    business_id:
+      pattern: '\d{3}-\d{2}-\d{5}'
+      description: '사업자등록번호'
+      risk_level: 'medium'
+      enabled: true
+    
+    driver_license:
+      pattern: '\d{2}-\d{2}-\d{6}-\d{2}'
+      description: '운전면허번호'
+      risk_level: 'high'
+      enabled: true
+    
+    passport:
+      pattern: '[A-Z]{1}[0-9]{8}|[A-Z]{2}[0-9]{7}'
+      description: '여권번호'
+      risk_level: 'high'
+      enabled: true
+
+  financial:
+    credit_card:
+      pattern: '\d{4}[-\s]?\d{4}[-\s]?\d{4}[-\s]?\d{4}'
+      description: '신용카드번호'
+      risk_level: 'high'
+      enabled: true
+    
+    account:
+      pattern: '\d{10,14}'
+      description: '계좌번호'
+      risk_level: 'high'
+      enabled: false  # 오탐지 가능성 높음
+
+  digital:
+    email:
+      pattern: '[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}'
+      description: '이메일주소'
+      risk_level: 'low'
+      enabled: true
+    
+    ip_address:
+      pattern: '\b(?:\d{1,3}\.){3}\d{1,3}\b'
+      description: 'IP주소'
+      risk_level: 'low'
+      enabled: false  # 필요시 활성화
+    
+    mac_address:
+      pattern: '([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]{2})'
+      description: 'MAC주소'
+      risk_level: 'low'
+      enabled: false  # 필요시 활성화
+
+  location:
+    postal_code:
+      pattern: '\b\d{5}\b'
+      description: '우편번호'
+      risk_level: 'low'
+      enabled: false  # 오탐지 가능성
+
+# 비식별화 전략 설정
+strategies:
+  default: 'masking'  # masking, pseudonymization, generalization
+  high_security: 'masking'
+  medium_security: 'generalization'
+  low_security: 'pseudonymization'
+
+# 위험 수준별 전략 매핑
+risk_level_strategy:
+  high: 'masking'
+  medium: 'generalization'
+  low: 'pseudonymization'
+
+# 마스킹 규칙
+masking_rules:
+  resident_id:
+    format: '******-*******'
+    preserve_format: true
+  
+  phone:
+    format: '***-****-****'
+    preserve_prefix: true  # 010 등 앞자리 유지
+  
+  email:
+    format: '*@*'
+    preserve_domain: true  # 도메인 유지
+  
+  credit_card:
+    format: '****-****-****-####'
+    preserve_last: 4  # 마지막 4자리 유지
+  
+  account:
+    format: '###*****##'
+    preserve_first: 3
+    preserve_last: 2
+
+# 가명화 설정
+pseudonymization:
+  format:
+    resident_id: 'RRN_{index:03d}'
+    phone: 'PHONE_{index:03d}'
+    email: 'EMAIL_{index:03d}'
+    credit_card: 'CARD_{index:03d}'
+    account: 'ACCOUNT_{index:03d}'
+    business_id: 'BIZ_{index:03d}'
+    passport: 'PASSPORT_{index:03d}'
+    driver_license: 'LICENSE_{index:03d}'
+    ip_address: 'IP_{index:03d}'
+    mac_address: 'MAC_{index:03d}'
+  
+  reset_counter: false  # 문서별 카운터 리셋 여부
+
+# 일반화 설정
+generalization:
+  age_ranges:
+    - [0, 20, '10대']
+    - [20, 30, '20대']
+    - [30, 40, '30대']
+    - [40, 50, '40대']
+    - [50, 60, '50대']
+    - [60, 70, '60대']
+    - [70, 999, '70대 이상']
+  
+  location_level: 2  # 1: 시/도, 2: 시/구, 3: 동/읍/면
+  
+  date_level: 'month'  # year, month, day
+
+# 예외 처리
+exceptions:
+  # 비식별화하지 않을 패턴이나 값
+  whitelist:
+    - '010-0000-0000'  # 예시 번호
+    - 'test@example.com'  # 테스트 이메일
+    - '123-45-67890'  # 예시 사업자번호
+  
+  # 특정 컨텍스트에서 제외
+  context_exclude:
+    - 'example'
+    - 'test'
+    - 'sample'
+
+# 성능 설정
+performance:
+  batch_size: 1000  # 배치 처리 크기
+  max_text_length: 1000000  # 최대 텍스트 길이
+  cache_enabled: true  # 캐싱 활성화
+  parallel_processing: false  # 병렬 처리
+
+# 활성화된 PII 유형 목록
+enabled_types:
+  - 'resident_id'
+  - 'foreign_id'
+  - 'phone'
+  - 'telephone'
+  - 'business_id'
+  - 'driver_license'
+  - 'passport'
+  - 'credit_card'
+  - 'email'
+
+# 문서 유형별 설정 (선택적)
+document_types:
+  pdf:
+    strategy: 'masking'
+    enabled_types:
+      - 'resident_id'
+      - 'phone'
+      - 'email'
+  
+  docx:
+    strategy: 'generalization'
+    enabled_types:
+      - 'resident_id'
+      - 'phone'
+      - 'credit_card'
+  
+  web:
+    strategy: 'pseudonymization'
+    enabled_types:
+      - 'email'
+      - 'ip_address'

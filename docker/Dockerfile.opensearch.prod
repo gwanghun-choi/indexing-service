@@ -1,0 +1,5 @@
+# OpenSearch 3.3.2 with Nori Plugin (Production)
+FROM opensearchproject/opensearch:3.3.2
+
+# Nori 한국어 분석기 플러그인 설치
+RUN bin/opensearch-plugin install --batch analysis-nori

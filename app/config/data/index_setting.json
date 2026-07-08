@@ -1,0 +1,108 @@
+{
+    "index_types": {
+        "FLAT": {
+            "description": "FLAT: 완전 탐색(Brute-force Search) 방식입니다. 장점: 가장 높은 정확도를 제공하며 모든 데이터를 대상으로 누락 없이 검색할 수 있습니다. 단점: 대용량 데이터에서는 검색 속도가 매우 느립니다. Usage: 소규모 데이터셋에서 정확한 검색 결과가 필요할 때 사용합니다.",
+            "default_params": {},
+            "search_params": {},
+            "default_params_description": {},
+            "search_params_description": {}
+        },
+        "IVF_FLAT": {
+            "description": "IVF_FLAT: Inverted File List + Brute-force Search 방식입니다. 장점: 검색 속도가 개선되어 중간 규모 데이터셋에 효율적입니다. 단점: nlist 값이 부적절하면 검색 정확도에 영향을 줄 수 있습니다. Usage: nlist 옵션을 통해 벡터를 클러스터로 분할하여 검색 성능을 조정할 때 사용합니다.",
+            "default_params": {
+                "nlist": 128
+            },
+            "search_params": {
+                "nprobe": 16
+            },
+            "default_params_description": "인덱스 생성 시 벡터를 그룹화하는 클러스터 개수를 정의하는 nlist 값을 포함합니다.",
+            "search_params_description": "유사도 검색 시 몇 개의 클러스터를 탐색할지를 결정하는 nprobe 값을 포함합니다. 높은 값일수록 정확도 증가하지만 검색 속도 저하 가능."
+        },
+        "IVF_SQ8": {
+            "description": "IVF_SQ8: IVF 방식에 Scalar Quantization을 적용하여 메모리 사용량을 최적화하는 방식입니다. 장점: 메모리 사용량을 줄이면서 검색 속도를 개선할 수 있습니다. 단점: 양자화로 인해 약간의 정확도 손실이 발생할 수 있습니다. Usage: 메모리 최적화가 필요한 상황에서 사용합니다.",
+            "default_params": {
+                "nlist": 128
+            },
+            "search_params": {
+                "nprobe": 16
+            },
+            "default_params_description": "인덱스 생성 시 클러스터 개수를 조정하는 nlist 값을 포함합니다.",
+            "search_params_description": "유사도 검색 시 탐색할 클러스터 수를 지정하는 nprobe 값을 포함합니다."
+        },
+        "IVF_PQ": {
+            "description": "IVF_PQ: IVF 방식과 Product Quantization(PQ)을 결합한 방식입니다. 장점: 대용량 데이터셋에서 메모리 사용량을 크게 줄일 수 있습니다. 단점: 벡터 압축 과정에서 검색 정확도가 낮아질 수 있으며, m 값 설정에 주의해야 합니다. Usage: nlist와 m 옵션을 조정하여 벡터 압축 효율을 극대화할 때 사용합니다.",
+            "default_params": {
+                "nlist": 100,
+                "m": 8
+            },
+            "search_params": {
+                "nprobe": 16
+            },
+            "default_params_description": "인덱스 생성 시 클러스터 개수(nlist) 및 PQ 압축 코드 수(m)를 정의하는 설정입니다.",
+            "search_params_description": "유사도 검색 시 탐색할 클러스터 개수를 조정하는 nprobe 값을 포함합니다."
+        },
+        "HNSW": {
+            "description": "HNSW: Hierarchical Navigable Small World Graph 방식으로, 그래프 기반의 근사 최근접 탐색을 지원합니다. 장점: 빠른 검색 속도와 높은 정확도를 제공하여 대규모 데이터셋에 적합합니다. 단점: 인덱스 생성 시 시간이 많이 소요되고 메모리 사용량이 많습니다. Usage: 빠른 근사 탐색이 필요한 경우에 사용합니다.",
+            "default_params": {
+                "M": 16,
+                "efConstruction": 200
+            },
+            "search_params": {
+                "ef": 100
+            },
+            "default_params_description": "HNSW 인덱스를 구성할 때 그래프의 연결 개수(M)와 구축 시 탐색 깊이(efConstruction)를 조정하는 설정입니다.",
+            "search_params_description": "유사도 검색 시 탐색할 후보 개수를 조정하는 ef 값을 포함합니다. 높은 값일수록 정확도가 증가하지만 검색 속도가 느려질 수 있습니다."
+        },
+        "ANNOY": {
+            "description": "ANNOY: Approximate Nearest Neighbors Oh Yeah 방식으로, 트리 기반의 근사 최근접 탐색을 제공합니다. 장점: 빠른 검색 속도와 낮은 메모리 사용량을 자랑합니다. 단점: 트리 개수(n_trees)에 따라 정확도가 달라지며 최적의 값을 찾기 어려울 수 있습니다. Usage: n_trees 옵션을 통해 여러 트리를 구성하여 검색 성능과 정확도의 균형을 맞출 때 사용합니다.",
+            "default_params": {
+                "n_trees": 50
+            },
+            "search_params": {
+                "search_k": 100
+            },
+            "default_params_description": "트리 개수를 조정하는 n_trees 값을 포함합니다. 트리 개수가 많을수록 정확도가 증가하지만 메모리 사용량이 늘어날 수 있습니다.",
+            "search_params_description": "유사도 검색 시 탐색할 트리 개수를 조정하는 search_k 값을 포함합니다. 높은 값일수록 정확도가 향상되지만 속도가 느려질 수 있습니다."
+        }
+    },
+    "metric_types": {
+        "L2": {
+            "description": "L2: 유클리드 거리(Euclidean Distance)를 사용하여 두 벡터 간의 거리의 제곱의 합으로 유사도를 측정합니다. 값이 작을수록 더 유사함을 나타냅니다. 값 범위: [0, ∞). 호환 필드 타입: FLOAT_VECTOR, FLOAT16_VECTOR, BFLOAT16_VECTOR. 주요 용도: 이미지 검색, 위치 기반 데이터 등에 적합합니다."
+        },
+        "IP": {
+            "description": "IP: 내적(Inner Product)을 사용하여 두 벡터 간의 유사도를 측정합니다. 값이 클수록 더 유사함을 나타냅니다. 값 범위: [-1, 1]. 호환 필드 타입: FLOAT_VECTOR, FLOAT16_VECTOR, BFLOAT16_VECTOR, SPARSE_FLOAT_VECTOR. 주요 용도: 추천 시스템, 검색 엔진 등에서 사용됩니다. 정규화된 벡터에서는 코사인 유사도와 동일합니다."
+        },
+        "COSINE": {
+            "description": "COSINE: 코사인 유사도(Cosine Similarity)를 사용하여 두 벡터 간의 각도를 측정합니다. 값이 클수록 더 유사함을 나타냅니다. 값 범위: [-1, 1]. 호환 필드 타입: FLOAT_VECTOR, FLOAT16_VECTOR, BFLOAT16_VECTOR. 주요 용도: 문서 검색, NLP, 텍스트 유사도 분석 등에서 사용됩니다. 벡터 크기의 영향을 받지 않고 방향성만 고려합니다."
+        },
+        "HAMMING": {
+            "description": "HAMMING: 해밍 거리(Hamming Distance)를 사용하여 이진 벡터 간의 서로 다른 비트 개수를 계산합니다. 값이 작을수록 더 유사함을 나타냅니다. 값 범위: [0, dim(vector)]. 호환 필드 타입: BINARY_VECTOR. 주요 용도: 이진 데이터 비교, 오류 검출, 해시 기반 이미지 검색 등에서 사용됩니다."
+        },
+        "JACCARD": {
+            "description": "JACCARD: 자카드 거리(Jaccard Distance)를 사용하여 두 집합 간의 교집합 대비 합집합의 비율로 유사도를 측정합니다. 값이 작을수록 더 유사함을 나타냅니다. 값 범위: [0, 1]. 호환 필드 타입: BINARY_VECTOR. 주요 용도: 카테고리 기반 데이터, 집합 비교, 추천 시스템 등에서 사용됩니다."
+        },
+        "TANIMOTO": {
+            "description": "TANIMOTO: 타니모토 거리는 자카드 유사도와 유사하지만, 빈도 정보를 추가로 반영하여 유사도를 측정합니다. 값이 작을수록 더 유사함을 나타냅니다. 값 범위: [0, 1]. 호환 필드 타입: BINARY_VECTOR. 주요 용도: 화학 분자 구조 비교, 바이너리 특성 벡터 유사도 등에서 사용됩니다."
+        },
+        "BM25": {
+            "description": "BM25: 텍스트 관련성 측정 방법으로, 용어 빈도(TF), 역문서 빈도(IDF), 문서 정규화를 결합합니다. 값이 클수록 더 관련성이 높음을 나타냅니다. 값 범위: [0, ∞). 호환 필드 타입: SPARSE_FLOAT_VECTOR. 주요 용도: 전체 텍스트 검색에만 사용되며, 텍스트 검색 결과의 관련성 순위를 개선합니다."
+        }
+    },
+    "field_types": {
+        "FLOAT_VECTOR": {
+            "description": "32비트 부동소수점 값으로 구성된 밀집 벡터 타입입니다. 차원 범위: 2-32,768. 지원 메트릭 타입: COSINE, L2, IP. 기본 메트릭: COSINE"
+        },
+        "FLOAT16_VECTOR": {
+            "description": "16비트 부동소수점 값으로 구성된 밀집 벡터 타입입니다. 차원 범위: 2-32,768. 지원 메트릭 타입: COSINE, L2, IP. 기본 메트릭: COSINE"
+        },
+        "BFLOAT16_VECTOR": {
+            "description": "16비트 뇌 부동소수점 값으로 구성된 밀집 벡터 타입입니다. 차원 범위: 2-32,768. 지원 메트릭 타입: COSINE, L2, IP. 기본 메트릭: COSINE"
+        },
+        "SPARSE_FLOAT_VECTOR": {
+            "description": "희소 벡터 타입으로, 차원을 지정할 필요가 없습니다. 지원 메트릭 타입: IP, BM25(전체 텍스트 검색용). 기본 메트릭: IP"
+        },
+        "BINARY_VECTOR": {
+            "description": "이진 값(0 또는 1)으로 구성된 벡터 타입입니다. 차원 범위: 8-32,768*8 (8의 배수여야 함). 지원 메트릭 타입: HAMMING, JACCARD. 기본 메트릭: HAMMING"
+        }
+    }
+}
