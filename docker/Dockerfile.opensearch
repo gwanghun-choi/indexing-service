@@ -1,19 +1,5 @@
 # OpenSearch 3.3.2 with Nori Plugin
 FROM opensearchproject/opensearch:3.3.2
 
-USER root
-
-# FortiGate CA 인증서 추가 (사내 환경용)
-COPY certs/fortigate-ca.crt /tmp/fortigate-ca.crt
-
-# Java truststore에 FortiGate CA 인증서 추가
-RUN /usr/share/opensearch/jdk/bin/keytool -importcert -trustcacerts -alias fortigate-ca \
-    -file /tmp/fortigate-ca.crt \
-    -keystore /usr/share/opensearch/jdk/lib/security/cacerts \
-    -storepass changeit -noprompt && \
-    rm /tmp/fortigate-ca.crt
-
-USER opensearch
-
 # Nori 한국어 분석기 플러그인 설치
 RUN bin/opensearch-plugin install --batch analysis-nori

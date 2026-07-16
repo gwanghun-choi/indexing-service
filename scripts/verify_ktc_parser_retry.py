@@ -2,6 +2,13 @@
 
 검증 1: parse_document() 직접 호출 → 정상 파싱 결과 반환 확인
 검증 2: ConnectionError mock으로 retry 로그 출력 확인
+
+사용법:
+    KTC_TEST_FILE=/path/to/sample.pdf uv run python scripts/verify_ktc_parser_retry.py
+
+.env의 POSTGRES_HOST가 Docker 내부 DNS 이름이면 로컬 실행 시 접속할 수 없습니다.
+이 경우 POSTGRES_HOST를 함께 지정하세요.
+    POSTGRES_HOST=localhost KTC_TEST_FILE=... uv run python scripts/verify_ktc_parser_retry.py
 """
 
 import asyncio
@@ -9,13 +16,10 @@ import json
 import logging
 import os
 import sys
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import requests
-
-# 로컬 실행 시 Docker 호스트명(db) → 실제 서버 IP로 오버라이드
-# .env의 POSTGRES_HOST="db"는 Docker 내부 DNS이므로 로컬에서 접속 불가
-os.environ["POSTGRES_HOST"] = "211.188.60.43"
 
 # 로깅 설정 (retry 로그 확인용)
 logging.basicConfig(
@@ -25,12 +29,13 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # 프로젝트 루트를 path에 추가
-sys.path.insert(0, "/root/indexing-service")
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from app.crud.postgres.parser_config_crud import select_parser_config  # noqa: E402
 from app.parser.ktc_parser import parse_document  # noqa: E402
 
-TEST_FILE = "/root/indexing-service/docs/붙임2. 재단 정보화 매뉴얼_2025년 개정.pdf"
+# 검증에 사용할 샘플 PDF 경로 (환경변수로 지정)
+TEST_FILE = os.getenv("KTC_TEST_FILE")
 
 
 def get_ktc_config() -> tuple:
@@ -47,13 +52,17 @@ def verify_1_direct_call():
     logger.info("검증 1: parse_document() 직접 호출")
     logger.info("=" * 60)
 
+    if not TEST_FILE:
+        logger.error("검증 1 FAILED: KTC_TEST_FILE 환경변수에 샘플 PDF 경로를 지정하세요")
+        return False
+
     try:
         endpoint, api_key = get_ktc_config()
         result = parse_document(
             file_path=TEST_FILE,
             endpoint=endpoint,
             api_key=api_key,
-            filename="붙임2. 재단 정보화 매뉴얼_2025년 개정.pdf",
+            filename=Path(TEST_FILE).name,
         )
 
         logger.info(f"파싱 결과: {len(result)}페이지")
@@ -77,6 +86,10 @@ def verify_2_retry_log():
     logger.info("=" * 60)
     logger.info("검증 2: ConnectionError mock → retry 로그 확인")
     logger.info("=" * 60)
+
+    if not TEST_FILE:
+        logger.error("검증 2 FAILED: KTC_TEST_FILE 환경변수에 샘플 PDF 경로를 지정하세요")
+        return False
 
     # 실제 API 응답을 미리 저장
     mock_response = MagicMock()

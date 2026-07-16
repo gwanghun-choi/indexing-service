@@ -27,7 +27,7 @@ flowchart LR
 | tdd | `/tdd [계획서경로] <Phase명>` | TDD 사이클 실행 (계획서 자동 참조) |
 | review | `/review [계획서경로] <Phase명>` | 코드 리뷰 (계획서 Phase 연계 가능) |
 | report | `/report <Phase명>` | 작업결과서 생성 (리뷰 완료 후) |
-| commit | `/commit [계획서경로] <Phase명> [DID-XXXX]` | 변경사항 커밋 (JIRA 코드 접두어 지원) |
+| commit | `/commit [계획서경로] <Phase명> [PROJ-XXXX]` | 변경사항 커밋 (JIRA 코드 접두어 지원) |
 
 ### 1.3 사전 준비: CLAUDE.md 환경 설정
 
@@ -37,11 +37,10 @@ flowchart LR
 
 | 항목 | 현재 값 (예시) | 수정 필요 |
 |------|---------------|----------|
-| 가상환경 이름 | `Indexing` | 본인의 conda/venv 환경명 |
-| conda 경로 | `/root/anaconda3/bin/conda` | 본인의 conda 설치 경로 |
-| 테스트 명령어 | `conda run -n Indexing pytest tests/ -v` | 환경에 맞게 수정 |
-| 린터 명령어 | `ruff check app/ tests/` | 프로젝트 구조에 맞게 수정 |
-| 서버 주소 | `211.188.60.43` | 본인의 DB 서버 주소 |
+| 패키지 관리자 | `uv` | 본인의 패키지 관리자 (uv/poetry/pip 등) |
+| 테스트 명령어 | `uv run pytest tests/ -v` | 환경에 맞게 수정 |
+| 린터 명령어 | `uv run ruff check app/ tests/` | 프로젝트 구조에 맞게 수정 |
+| 인프라 접속 정보 | `.env` (`.env.example` 참고) | 본인의 DB/서버 주소 |
 
 **CLAUDE.md 위치**: 프로젝트 루트의 `CLAUDE.md` 파일
 
@@ -258,7 +257,7 @@ flowchart LR
 /commit <Phase명>                  # 최근 계획서의 Phase 관련 변경 커밋
 /commit <계획서명> <Phase명>        # 특정 계획서의 Phase 관련 변경 커밋
 /commit <전체경로> <Phase명>        # 전체 경로로 계획서 지정
-/commit <Phase명> <DID-XXXX>       # JIRA 코드 포함 커밋
+/commit <Phase명> <PROJ-XXXX>       # JIRA 코드 포함 커밋
 ```
 
 **예시**:
@@ -273,7 +272,7 @@ flowchart LR
 /commit docs/working_history/2026/260129/async-milvus_todolist.md Phase1
 
 # JIRA 코드 포함 커밋
-/commit Phase1 DID-1333
+/commit Phase1 PROJ-1234
 ```
 
 ---

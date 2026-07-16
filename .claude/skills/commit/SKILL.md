@@ -1,6 +1,6 @@
 ---
 name: commit
-description: 변경사항 커밋. Phase 완료 후 사용. 사용법 /commit [계획서경로] <Phase명> [DID-XXXX]
+description: 변경사항 커밋. Phase 완료 후 사용. 사용법 /commit [계획서경로] <Phase명> [PROJ-XXXX]
 allowed-tools: Read, Bash, Glob, Edit, AskUserQuestion
 ---
 
@@ -16,12 +16,12 @@ allowed-tools: Read, Bash, Glob, Edit, AskUserQuestion
 - `Phase1` → 최근 계획서에서 Phase1
 - `async-milvus Phase1` → 특정 계획서의 Phase1
 - `docs/working_history/260128/plan.md Phase1` → 특정 경로 계획서
-- `Phase1 DID-1333` → Phase1 + JIRA 코드
-- `DID-1333` → JIRA 코드만 (전체 staged 파일)
+- `Phase1 PROJ-1234` → Phase1 + JIRA 코드
+- `PROJ-1234` → JIRA 코드만 (전체 staged 파일)
 - (미지정) → 최근 변경 파일 전체
 
 **JIRA 코드 추출**:
-- 패턴: `DID-\d+` (예: DID-1333)
+- 패턴: `[A-Z]+-\d+` (예: PROJ-1234)
 - 커밋 메시지 접두어로 사용
 
 ---
@@ -74,7 +74,7 @@ git diff --stat
 JIRA 코드가 있으면:
 
 ```
-DID-XXXX [Phase{N}-{단계}] <type>: <한글 설명>
+PROJ-XXXX [Phase{N}-{단계}] <type>: <한글 설명>
 ```
 
 **단계 구분** (Tidy First 원칙):
@@ -99,8 +99,8 @@ DID-XXXX [Phase{N}-{단계}] <type>: <한글 설명>
 **예시**:
 
 ```
-DID-1333 [Phase1-Green] feat: Milvus 비동기 클라이언트 구현
-DID-1333 [Phase1-Refactor] refactor: 연결 풀 구조 개선
+PROJ-1234 [Phase1-Green] feat: Milvus 비동기 클라이언트 구현
+PROJ-1234 [Phase1-Refactor] refactor: 연결 풀 구조 개선
 [Phase2-Red] test: 배치 처리 실패 케이스 테스트 추가
 ```
 
