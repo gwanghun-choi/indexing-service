@@ -12,6 +12,7 @@ from docx.oxml.ns import qn
 from docx.table import Table
 from docx.text.paragraph import Paragraph
 
+from app.config.settings import settings
 from app.parser.base import ParserInterface
 
 logger = logging.getLogger(__name__)
@@ -203,8 +204,10 @@ class DocxParser(ParserInterface):
 
     def _add_section_dividers(self, text: str) -> str:
         """특정 패턴 뒤에 구분선 추가"""
-        # 패턴 1: "- 신규 DidimAMP 기능 개발" 뒤에 구분선
-        text = re.sub(r"(- 신규 DidimAMP 기능 개발)", r"\1\n\n---", text)
+        # 패턴 1: 조직별 섹션 패턴 뒤에 구분선 (DOCX_SECTION_DIVIDER_PATTERN 설정 시)
+        divider_pattern = settings.DOCX_SECTION_DIVIDER_PATTERN
+        if divider_pattern:
+            text = re.sub(f"({divider_pattern})", r"\1\n\n---", text)
 
         # 패턴 2: "**기타 실적**" 뒤에 구분선
         text = re.sub(r"(\*\*.*?기타 실적.*?\*\*.*)", r"\1\n\n---", text)
@@ -253,10 +256,11 @@ class DocxParser(ParserInterface):
 
                 # 하이퍼링크 추출 및 추가
                 hyperlinks = self._extract_hyperlinks_from_cell(cell)
-                if hyperlinks:
-                    # KMS Wiki 링크가 있으면 추가
+                wiki_link_host = settings.DOCX_WIKI_LINK_HOST
+                if hyperlinks and wiki_link_host:
+                    # 위키 호스트 링크가 있으면 추가 (DOCX_WIKI_LINK_HOST 설정 시)
                     for link in hyperlinks:
-                        if "kms.didimservice.com" in link:
+                        if wiki_link_host in link:
                             cell_content = cell_content.replace(
                                 "KMS Wiki 정리 :", f"KMS Wiki 정리 : {link}"
                             )

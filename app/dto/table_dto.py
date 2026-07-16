@@ -199,10 +199,10 @@ class DocumentVectorResponseDTO(BaseModel):
         json_schema_extra = {
             "example": {
                 "id": 459761794349220801,
-                "parsed_text": "SaaS 기업들이 기다려온 맞춤 서비스!\\nDidimSaaSMaker...",
+                "parsed_text": "SaaS 기업들이 기다려온 맞춤 서비스!\\n샘플 제품 소개...",
                 "chunk_index": 0,
-                "title": "DidimSaasMaker 소개자료",
-                "filename": "didimsaasmaker_data.pdf",
+                "title": "샘플 제품 소개자료",
+                "filename": "sample_product_intro.pdf",
                 "page_number": 1,
                 "token": 618,
                 "cost": 0.0000618,

@@ -26,8 +26,8 @@ uv sync
 uv add <package>
 uv remove <package>
 
-# 서버 (211.188.60.43)
-# Milvus:19530, Redis:16379, OpenSearch:19200, PostgreSQL:5432
+# 인프라 접속 정보는 .env 참조 (.env.example 복사 후 설정)
+# 기본 포트: Milvus:19530, Redis:6379, OpenSearch:19200, PostgreSQL:5432
 ```
 
 > ⚠️ 모든 테스트/린터 실행 시 위 명령어 형식 사용
@@ -93,7 +93,7 @@ TDD 워크플로우를 위한 skills가 제공됩니다:
 | `$tdd` | TDD 워크플로우 실행 | `$tdd [계획서] <Phase>` |
 | `$review` | 코드 리뷰 | `$review [계획서] <Phase>` |
 | `$report` | 작업결과서 생성 | `$report [계획서] <Phase>` |
-| `$commit` | 커밋 실행 | `$commit [계획서] <Phase> [DID-XXXX]` |
+| `$commit` | 커밋 실행 | `$commit [계획서] <Phase> [PROJ-XXXX]` |
 
 **워크플로우 순서**: `$prd` → `$plan` → `$tdd` → `$review` → `$report` → `$commit`
 

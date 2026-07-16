@@ -5,7 +5,7 @@
 ![Milvus](https://img.shields.io/badge/Milvus-2.5-purple.svg)
 ![OpenSearch](https://img.shields.io/badge/OpenSearch-BM25-005EB8.svg)
 ![Celery](https://img.shields.io/badge/Celery-5.6-37814A.svg)
-![License](https://img.shields.io/badge/License-Proprietary-red.svg)
+![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 
 **🔍 RAG 애플리케이션을 위한 엔터프라이즈급 문서 벡터화·인덱싱·하이브리드 검색 엔진**
 
@@ -26,7 +26,6 @@ Indexing Service는 대규모 문서를 파싱·청킹·임베딩하여 벡터/�
 - [API Documentation](#-api-documentation)
 - [Development](#-development)
 - [Docs](#-docs)
-- [Related Projects](#-related-projects)
 
 ---
 
@@ -380,20 +379,6 @@ uv run ruff check app/ tests/
 
 ---
 
-## 🔗 Related Projects
-
-| Project | Description |
-|---------|-------------|
-| [DidimAIStudio CloudStorage](https://github.com/didim365/didimAIStudio_CloudStorage) | ☁️ 클라우드 스토리지 서비스 |
-
----
-
 ## 📄 License
 
-This project is proprietary software. All rights reserved.
-
----
-
-<p align="center">
-  Made with ❤️ by <strong>Didim365</strong>
-</p>
+MIT License

@@ -1,6 +1,6 @@
 """
 Reranker 원격 서비스 클라이언트
-didimAIStudio_Reranker 서비스와 통신합니다.
+원격 Reranker 서비스(RERANKER_SERVICE_URL)와 통신합니다.
 """
 
 # Standard Library

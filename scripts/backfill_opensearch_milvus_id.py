@@ -3,25 +3,25 @@
 Milvus vector 컬렉션에서 id, hash_sha256, chunk_index를 조회한 뒤,
 OpenSearch 문서를 partial update하여 milvus_id를 추가합니다.
 
+접속 정보는 .env(MILVUS_HOST/PORT, OPENSEARCH_HOST/PORT)를 따릅니다.
+.env 값이 Docker 내부 DNS 이름이면 로컬 실행 시 접속할 수 없으므로,
+아래처럼 대상 호스트를 함께 지정하세요.
+
 사용법:
     uv run python scripts/backfill_opensearch_milvus_id.py
     uv run python scripts/backfill_opensearch_milvus_id.py --dry-run
+    MILVUS_HOST=localhost OPENSEARCH_HOST=localhost \
+        uv run python scripts/backfill_opensearch_milvus_id.py --dry-run
 """
 
 import argparse
 import asyncio
 import logging
-import os
 import sys
+from pathlib import Path
 from typing import Dict, List, Tuple
 
-# 로컬 실행 시 Docker 호스트명 → 실제 서버 IP로 오버라이드
-os.environ.setdefault("MILVUS_HOST", "211.188.57.129")
-os.environ.setdefault("MILVUS_PORT", "19530")
-os.environ.setdefault("OPENSEARCH_HOST", "211.188.57.129")
-os.environ.setdefault("OPENSEARCH_PORT", "19200")
-
-sys.path.insert(0, "/root/indexing-service")
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from app.config.database.async_milvus import (
     async_list_collections,

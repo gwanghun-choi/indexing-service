@@ -3,7 +3,7 @@ Passport Parser 모듈 버전 관리
 """
 
 __version__ = "1.1.0"
-__author__ = "Didim AI Studio"
+__author__ = "indexing-service"
 __description__ = "JWT passport 구조를 파싱하고 권한 확인을 위한 유틸리티"
 
 # 버전 히스토리

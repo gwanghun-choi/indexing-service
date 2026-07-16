@@ -176,7 +176,7 @@ sample_files/
 volumes/
 uploads/
 
-# FortiGate CA 인증서 (보안상 Git에 포함하지 않음)
+# 인증서 (보안상 Git에 포함하지 않음)
 certs/
 
 # IDE / Editor

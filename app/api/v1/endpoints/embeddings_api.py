@@ -413,7 +413,7 @@ async def rollback_embedding(
                 "application/json": {
                     "example": [
                         {
-                            "filename": "didim365_여비규정.pdf",
+                            "filename": "여비규정.pdf",
                             "page_number": 5,
                             "chunk_index": 2,
                             "text": "해외 출장 시 일비는 국가별로 상이하며, 기본적으로 USD 130을 기준으로 합니다...",

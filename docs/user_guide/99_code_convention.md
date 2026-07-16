@@ -7,25 +7,23 @@
 ## 1. Environment
 
 ```bash
-# macOS
-/opt/anaconda3/condabin/conda run -n Indexing python your_script.py
-/opt/anaconda3/condabin/conda run -n Indexing pytest tests/
+# Run scripts / tests
+uv run python your_script.py
+uv run pytest tests/ -v
 
-# WSL
-/root/anaconda3/bin/conda run -n Indexing python your_script.py
-/root/anaconda3/bin/conda run -n Indexing pytest tests/
-
-# Install libraries (latest version only, no version pinning)
-pip install {library_name}
-pip freeze > requirements.txt
+# Manage dependencies
+uv add {library_name}
+uv sync
 ```
 
-**Server Environment:**
+**Infrastructure:**
 
-| Service | Local Port (211.188.60.43) |
-|---------|---------------------------|
+접속 정보(호스트/포트/자격증명)는 `.env`에서 관리합니다. `.env.example`를 복사해 사용하세요.
+
+| Service | Default Port |
+|---------|--------------|
 | Milvus | 19530 |
-| Redis | 16379 |
+| Redis | 6379 |
 | OpenSearch | 19200 |
 | PostgreSQL | 5432 |
 
